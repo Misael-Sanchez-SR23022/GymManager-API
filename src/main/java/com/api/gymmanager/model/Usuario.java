@@ -1,5 +1,8 @@
 package com.api.gymmanager.model;
 
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
 import com.api.gymmanager.model.EnumModel.GeneroEnum;
 
 import jakarta.persistence.*;
@@ -40,6 +43,7 @@ public class Usuario {
     private String correoElectronico;
 
     @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(name = "genero",nullable = false)
     private GeneroEnum genero;
 }

@@ -13,6 +13,5 @@ public record CreateUsuarioRequest(
     @NotBlank @Email String correoElectronico,
     @NotBlank String nombreUsuario,
     @NotBlank @Size(min = 8) String contrasenia,
-    @NotNull GeneroEnum genero,
-    @NotNull Integer rolId
+    @NotNull GeneroEnum genero
 ) {}
