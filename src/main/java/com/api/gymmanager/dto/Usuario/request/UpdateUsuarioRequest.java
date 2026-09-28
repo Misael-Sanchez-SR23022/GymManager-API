@@ -3,13 +3,14 @@ package com.api.gymmanager.dto.Usuario.request;
 import com.api.gymmanager.model.EnumModel.GeneroEnum;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public record UpdateUsuarioRequest(
-    String primerNombre,
+    @NotBlank String primerNombre,
     String segundoNombre,
-    @Email String correoElectronico,
-    String nombreUsuario,
-    GeneroEnum genero,
-    Integer rolId
+    @NotBlank @Email String correoElectronico,
+    @NotBlank String nombreUsuario,
+    @NotNull GeneroEnum genero
 ) {}
 

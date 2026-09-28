@@ -2,14 +2,17 @@ package com.api.gymmanager.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.api.gymmanager.dto.Usuario.request.CreateUsuarioRequest;
 import com.api.gymmanager.dto.Usuario.request.SearchUsuarioRequest;
+import com.api.gymmanager.dto.Usuario.request.UpdateUsuarioRequest;
 import com.api.gymmanager.dto.Usuario.response.UsuarioResponse;
 //import com.api.gymmanager.service.RolService;
 import com.api.gymmanager.service.UsuarioService;
@@ -37,5 +40,19 @@ public class UsuarioController {
         SearchUsuarioRequest dto = new SearchUsuarioRequest(id, null);
         UsuarioResponse response = usuarioService.searchUsuario(dto);
         return ResponseEntity.ok(response);
+    }
+
+     @PutMapping("/{id}")
+    public ResponseEntity<UsuarioResponse> updateUsuario(
+            @PathVariable Integer id,
+            @Valid @RequestBody UpdateUsuarioRequest dto) {
+        UsuarioResponse response = usuarioService.updateUsuario(id, dto);
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUsuario(@PathVariable Integer id) {
+        usuarioService.deleteUsuario(id);
+        return ResponseEntity.noContent().build();
     }
 }
