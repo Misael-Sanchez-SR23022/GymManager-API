@@ -1,5 +1,7 @@
 package com.api.gymmanager.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.api.gymmanager.dto.Rol.request.CreateRolRequest;
@@ -32,6 +34,14 @@ public class RolService {
         return new CreateRolResponse(saved.getRolId(), saved.getNombreRol());
     }
 
+    public List<CreateRolResponse> getAllRoles() {
+        return rolRepository.findAll().stream()
+                .map(rol -> new CreateRolResponse(
+                        rol.getRolId(),
+                        rol.getNombreRol()))
+                .toList();
+    }
+
     public SearchRolResponse searchRol(SearchRolRequest dto) {
         Rol entity = rolRepository.findByRolId(dto.rolId())
                 .orElseThrow(() -> new ResourceNotFoundException("Rol " + dto.rolId() + " no encontrado"));
@@ -39,7 +49,7 @@ public class RolService {
         return new SearchRolResponse(entity.getRolId(), entity.getNombreRol());
     }
 
-       public UpdateRolResponse updateRol(Integer id, UpdateRolRequest dto) {
+    public UpdateRolResponse updateRol(Integer id, UpdateRolRequest dto) {
         Rol entity = rolRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Rol" + id + "no encontrado"));
 
@@ -55,11 +65,11 @@ public class RolService {
         return new UpdateRolResponse(updated.getRolId(), updated.getNombreRol());
     }
 
-       public void deleteRol(Integer id) {
+    public void deleteRol(Integer id) {
         Rol entity = rolRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Rol" + id + "no encontrado"));
 
         rolRepository.delete(entity);
     }
-    
+
 }
