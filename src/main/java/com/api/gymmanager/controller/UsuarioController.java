@@ -1,5 +1,6 @@
 package com.api.gymmanager.controller;
 
+import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,12 +28,18 @@ import lombok.RequiredArgsConstructor;
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
-    //private final RolService rolService;
+    // private final RolService rolService;
 
     @PostMapping
     public ResponseEntity<UsuarioResponse> createUsuario(@Valid @RequestBody CreateUsuarioRequest dto) {
         UsuarioResponse response = usuarioService.createUsuario(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<UsuarioResponse>> getAllUsuarios() {
+        List<UsuarioResponse> usuarios = usuarioService.getAllUsuarios();
+        return ResponseEntity.ok(usuarios);
     }
 
     @GetMapping("/{id}")
@@ -42,7 +49,7 @@ public class UsuarioController {
         return ResponseEntity.ok(response);
     }
 
-     @PutMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<UsuarioResponse> updateUsuario(
             @PathVariable Integer id,
             @Valid @RequestBody UpdateUsuarioRequest dto) {

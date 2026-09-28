@@ -1,5 +1,7 @@
 package com.api.gymmanager.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.api.gymmanager.dto.Usuario.request.CreateUsuarioRequest;
@@ -61,6 +63,11 @@ public class UsuarioService {
         return mapToResponse(entity);
     }
 
+    public List<UsuarioResponse> getAllUsuarios() {
+    return usuarioRepository.findAll().stream()
+            .map(this::mapToResponse)
+            .toList();
+}
     public UsuarioResponse updateUsuario(Integer id, UpdateUsuarioRequest dto) {
         Usuario entity = usuarioRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario" + id + "no encontrado"));
