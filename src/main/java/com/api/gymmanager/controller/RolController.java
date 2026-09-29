@@ -1,5 +1,7 @@
 package com.api.gymmanager.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,6 +35,12 @@ public class RolController {
     public ResponseEntity<CreateRolResponse> createRol(@Valid @RequestBody CreateRolRequest dto) {
         CreateRolResponse response = rolService.createRol(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CreateRolResponse>> getAllRoles() {
+        List<CreateRolResponse> response = rolService.getAllRoles();
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
