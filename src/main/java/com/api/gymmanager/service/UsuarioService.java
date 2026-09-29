@@ -2,6 +2,7 @@ package com.api.gymmanager.service;
 
 import java.util.List;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.api.gymmanager.dto.Usuario.request.CreateUsuarioRequest;
@@ -23,6 +24,7 @@ public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final RolRepository rolRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public UsuarioResponse createUsuario(CreateUsuarioRequest dto) {
         if (usuarioRepository.findByNombreUsuario(dto.nombreUsuario()).isPresent()) {
@@ -41,7 +43,7 @@ public class UsuarioService {
         entity.setSegundoNombre(dto.segundoNombre());
         entity.setNombreUsuario(dto.nombreUsuario());
         entity.setCorreoElectronico(dto.correoElectronico());
-        entity.setContrasenia(dto.contrasenia());
+        entity.setContrasenia(passwordEncoder.encode(dto.contrasenia()));
         entity.setGenero(dto.genero());
         entity.setRol(rolPorDefecto);
 

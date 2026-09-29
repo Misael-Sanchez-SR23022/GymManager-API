@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class RolService {
+public class RolService{
 
     private final RolRepository rolRepository;
 
