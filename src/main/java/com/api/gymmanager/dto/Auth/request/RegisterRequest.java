@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public record RegisterUsuarioRequest(
+public record RegisterRequest(
     @NotBlank String primerNombre,
     String segundoNombre,
     @NotBlank @Email String correoElectronico,
