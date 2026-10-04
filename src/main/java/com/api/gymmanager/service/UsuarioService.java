@@ -97,6 +97,15 @@ public class UsuarioService {
         usuarioRepository.delete(entity);
     }
 
+
+    public long count() {
+        return usuarioRepository.count();
+    }
+
+    public Usuario save(Usuario usuario) {
+        return usuarioRepository.save(usuario);
+    }
+
     private UsuarioResponse mapToResponse(Usuario entity) {
         return new UsuarioResponse(
                 entity.getUsuarioId(),
