@@ -2,8 +2,7 @@ package com.api.gymmanager.dto.Auth.response;
 
 import com.api.gymmanager.dto.Usuario.response.UsuarioResponse;
 
-public record LoginUsuarioResponse(
-    String token,
-    String tipoToken,      
+public record LoginResponse(
+    String token,    
     UsuarioResponse usuario
 ) {}
