@@ -14,6 +14,8 @@
     import org.springframework.web.bind.annotation.RequestBody;
     import lombok.RequiredArgsConstructor;
 
+    import jakarta.validation.Valid;
+
     @RestController 
     @RequestMapping ("/auth")
     @RequiredArgsConstructor 
@@ -22,10 +24,10 @@
         private final AuthService authService;
 
         @PostMapping("/login")
-        public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest dto){
+        public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest dto){
             return ResponseEntity.ok(authService.login(dto));}
 
         @PostMapping("/register")
-        public ResponseEntity<LoginResponse> register(@RequestBody RegisterRequest dto){
+        public ResponseEntity<LoginResponse> register(@Valid @RequestBody RegisterRequest dto){
             return ResponseEntity.ok(authService.register(dto));}
     }

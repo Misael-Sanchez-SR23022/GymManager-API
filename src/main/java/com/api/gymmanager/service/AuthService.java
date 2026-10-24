@@ -29,7 +29,7 @@ public class AuthService {
 
     public LoginResponse login(LoginRequest dto) {
         Usuario entity = usuarioRepository.findByNombreUsuario(dto.nombreUsuario())
-                .orElseThrow(() -> new ResourceNotFoundException("Usuario " + dto.nombreUsuario() + " no encontrado"));
+                .orElseThrow(() -> new BadCredentialsException("Credenciales inválidas"));
 
         if (!passwordEncoder.matches(dto.contrasenia(), entity.getContrasenia())) {
             throw new BadCredentialsException("Credenciales inválidas");
