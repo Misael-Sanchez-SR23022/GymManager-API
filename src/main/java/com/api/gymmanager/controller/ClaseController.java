@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import com.api.gymmanager.dto.Clase.request.CreateClaseRequest;
 import com.api.gymmanager.dto.Clase.request.UpdateClaseRequest;
@@ -29,6 +30,7 @@ public class ClaseController {
 
     private final ClaseService claseService;
 
+    @PreAuthorize("hasRole('Administrador')")
     @PostMapping
     public ResponseEntity<ClaseResponse> createClase(@Valid @RequestBody CreateClaseRequest dto) {
         ClaseResponse response = claseService.createClase(dto);
@@ -41,6 +43,7 @@ public class ClaseController {
     }
 
     // Asignar Entrenador: lista de usuarios con rol Entrenador
+    @PreAuthorize("hasRole('Administrador')")
     @GetMapping("/entrenadores")
     public ResponseEntity<List<UsuarioResponse>> getEntrenadores() {
         return ResponseEntity.ok(claseService.getEntrenadores());
@@ -51,6 +54,7 @@ public class ClaseController {
         return ResponseEntity.ok(claseService.getClaseById(id));
     }
 
+    @PreAuthorize("hasRole('Administrador')")
     @PutMapping("/{id}")
     public ResponseEntity<ClaseResponse> updateClase(
             @PathVariable Integer id,
@@ -58,6 +62,7 @@ public class ClaseController {
         return ResponseEntity.ok(claseService.updateClase(id, dto));
     }
 
+    @PreAuthorize("hasRole('Administrador')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteClase(@PathVariable Integer id) {
         claseService.deleteClase(id);
