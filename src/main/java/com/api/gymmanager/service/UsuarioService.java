@@ -7,15 +7,19 @@ import org.springframework.stereotype.Service;
 
 import com.api.gymmanager.dto.Usuario.request.CreateUsuarioRequest;
 import com.api.gymmanager.dto.Usuario.request.SearchUsuarioRequest;
+import com.api.gymmanager.dto.Usuario.request.UpdateRolUsuarioRequest;
 import com.api.gymmanager.dto.Usuario.request.UpdateUsuarioRequest;
 import com.api.gymmanager.dto.Usuario.response.UsuarioResponse;
+import com.api.gymmanager.exception.BusinessRuleException;
 import com.api.gymmanager.exception.ResourceAlreadyExistsException;
 import com.api.gymmanager.exception.ResourceNotFoundException;
 import com.api.gymmanager.model.Rol;
 import com.api.gymmanager.model.Usuario;
+import com.api.gymmanager.repository.ClaseRepository;
 import com.api.gymmanager.repository.RolRepository;
 import com.api.gymmanager.repository.UsuarioRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -25,6 +29,7 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final RolRepository rolRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ClaseRepository claseRepository;
 
     public UsuarioResponse createUsuario(CreateUsuarioRequest dto) {
         if (usuarioRepository.findByNombreUsuario(dto.nombreUsuario()).isPresent()) {
@@ -65,11 +70,14 @@ public class UsuarioService {
         return mapToResponse(entity);
     }
 
-    public List<UsuarioResponse> getAllUsuarios() {
-    return usuarioRepository.findAll().stream()
-            .map(this::mapToResponse)
-            .toList();
-}
+    public List<UsuarioResponse> getAllUsuarios(String nombreRol) {
+        List<Usuario> usuarios = (nombreRol == null || nombreRol.isBlank())
+                ? usuarioRepository.findAll()
+                : usuarioRepository.findByRolNombreRol(nombreRol);
+
+        return usuarios.stream().map(this::mapToResponse).toList();
+    }
+
     public UsuarioResponse updateUsuario(Integer id, UpdateUsuarioRequest dto) {
         Usuario entity = usuarioRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario" + id + "no encontrado"));
@@ -97,13 +105,36 @@ public class UsuarioService {
         usuarioRepository.delete(entity);
     }
 
-
     public long count() {
         return usuarioRepository.count();
     }
 
     public Usuario save(Usuario usuario) {
         return usuarioRepository.save(usuario);
+    }
+
+    @Transactional
+    public UsuarioResponse cambiarRol(Integer id, UpdateRolUsuarioRequest dto, Integer adminId) {
+        if (id.equals(adminId)) {
+            throw new BusinessRuleException("No puedes cambiar tu propio rol");
+        }
+
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario " + id + " no encontrado"));
+
+        Rol nuevoRol = rolRepository.findById(dto.rolId())
+                .orElseThrow(() -> new ResourceNotFoundException("Rol " + dto.rolId() + " no encontrado"));
+
+        boolean eraEntrenador = "Entrenador".equals(usuario.getRol().getNombreRol());
+        boolean seguiraSiendoEntrenador = "Entrenador".equals(nuevoRol.getNombreRol());
+
+        if (eraEntrenador && !seguiraSiendoEntrenador && claseRepository.existsByEntrenadorUsuarioId(id)) {
+            throw new BusinessRuleException(
+                    "El entrenador tiene clases asignadas. Reasígnalas antes de cambiarle el rol");
+        }
+
+        usuario.setRol(nuevoRol);
+        return mapToResponse(usuarioRepository.save(usuario));
     }
 
     private UsuarioResponse mapToResponse(Usuario entity) {

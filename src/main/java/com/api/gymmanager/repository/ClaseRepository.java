@@ -7,4 +7,5 @@ import com.api.gymmanager.model.Clase;
 
 @Repository
 public interface ClaseRepository extends JpaRepository<Clase, Integer> {
+    boolean existsByEntrenadorUsuarioId(Integer usuarioId);
 }
