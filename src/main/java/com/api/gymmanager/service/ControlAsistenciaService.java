@@ -31,6 +31,11 @@ import com.api.gymmanager.exception.BusinessRuleException;
 import com.api.gymmanager.exception.ResourceAlreadyExistsException;
 import com.api.gymmanager.model.Usuario;
 
+import org.springframework.context.ApplicationEventPublisher;
+
+import com.api.gymmanager.event.InasistenciaRegistradaEvent;
+import com.api.gymmanager.model.EnumModel.AsistenciaEnum;
+
 @Service
 @RequiredArgsConstructor
 public class ControlAsistenciaService {
@@ -38,8 +43,9 @@ public class ControlAsistenciaService {
     private final ControlAsistenciaRepository controlAsistenciaRepository;
     private final InscripcionRepository inscripcionRepository;
     private final ClaseRepository claseRepository;
+        private final ApplicationEventPublisher eventPublisher;
 
-    // Inscripciones activas de una clase (base de Registrar Asistencia, #35)
+    // Inscripciones activas de una clase (base de Registrar Asistencia)
     @Transactional(readOnly = true)
     public List<Inscripcion> obtenerInscripcionesActivas(Integer claseId) {
         buscarClase(claseId); // valida que la clase exista
@@ -121,13 +127,20 @@ public class ControlAsistenciaService {
             registros.add(registro);
         }
 
+
+               List<ControlAsistencia> guardados;
         try {
-            return controlAsistenciaRepository.saveAll(registros).stream()
-                    .map(this::mapToResponse)
-                    .toList();
+            guardados = controlAsistenciaRepository.saveAll(registros);
         } catch (DataAccessException e) {
             throw new IllegalStateException("No se pudo guardar la asistencia", e);
         }
+
+        // <<extend>> Notificar Inasistencia: un evento por cada usuario ausente
+        guardados.stream()
+                .filter(r -> r.getAsistencia() == AsistenciaEnum.Falto)
+                .forEach(this::publicarInasistencia);
+
+        return guardados.stream().map(this::mapToResponse).toList();
     }
 
     // Verificar Inscripción Activa: clase_id + usuario_id -> inscripcion
@@ -151,5 +164,19 @@ public class ControlAsistenciaService {
         String nombre = u.getPrimerNombre()
                 + (u.getSegundoNombre() != null ? " " + u.getSegundoNombre() : "");
         return new InscritoResponse(i.getInscripcionId(), u.getUsuarioId(), nombre);
+    }
+        private void publicarInasistencia(ControlAsistencia registro) {
+        Usuario u = registro.getInscripcion().getUsuario();
+        eventPublisher.publishEvent(new InasistenciaRegistradaEvent(
+                u.getUsuarioId(),
+                nombreCompleto(u),
+                u.getCorreoElectronico(),
+                registro.getInscripcion().getClase().getNombreClase(),
+                registro.getFechaAsistencia()));
+    }
+
+    private String nombreCompleto(Usuario u) {
+        return u.getPrimerNombre()
+                + (u.getSegundoNombre() != null ? " " + u.getSegundoNombre() : "");
     }
 }

@@ -17,6 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.access.AccessDeniedException;
 
 import com.api.gymmanager.dto.ControlAsistencia.request.AsistenciaItemRequest;
@@ -35,12 +36,20 @@ import com.api.gymmanager.repository.ClaseRepository;
 import com.api.gymmanager.repository.ControlAsistenciaRepository;
 import com.api.gymmanager.repository.InscripcionRepository;
 
+import static org.mockito.ArgumentMatchers.any;
+
+import org.mockito.ArgumentCaptor;
+import org.springframework.context.ApplicationEventPublisher;
+
+import com.api.gymmanager.event.InasistenciaRegistradaEvent;
+
 @ExtendWith(MockitoExtension.class)
 class ControlAsistenciaServiceTest {
 
     @Mock ControlAsistenciaRepository controlAsistenciaRepository;
     @Mock InscripcionRepository inscripcionRepository;
     @Mock ClaseRepository claseRepository;
+    @Mock ApplicationEventPublisher eventPublisher;
 
     @InjectMocks ControlAsistenciaService controlAsistenciaService;
 
@@ -140,5 +149,39 @@ class ControlAsistenciaServiceTest {
         assertEquals(1, r.size());
         assertEquals("Ana", r.get(0).nombreMiembro());
         assertEquals(10, r.get(0).inscripcionId());
+    }
+        @Test
+    void registrarAsistencia_ausente_publicaEventoDeInasistencia() {
+        CreateControlAsistenciaRequest ausente = new CreateControlAsistenciaRequest(1, fecha,
+                List.of(new AsistenciaItemRequest(7, AsistenciaEnum.Falto)));
+
+        when(claseRepository.findById(1)).thenReturn(Optional.of(clase));
+        when(inscripcionRepository.findByClaseClaseIdAndUsuarioUsuarioIdAndEstado(1, 7, EstadoEnum.Activa))
+                .thenReturn(Optional.of(inscripcion));
+        when(controlAsistenciaRepository.existsByInscripcionInscripcionIdAndFechaAsistencia(10, fecha))
+                .thenReturn(false);
+        when(controlAsistenciaRepository.saveAll(anyList())).thenAnswer(i -> i.getArgument(0));
+
+        controlAsistenciaService.registrarAsistencia(3, ausente);
+
+        ArgumentCaptor<InasistenciaRegistradaEvent> captor =
+                ArgumentCaptor.forClass(InasistenciaRegistradaEvent.class);
+        verify(eventPublisher).publishEvent(captor.capture());
+        assertEquals(7, captor.getValue().usuarioId());
+        assertEquals("Yoga", captor.getValue().nombreClase());
+    }
+
+    @Test
+    void registrarAsistencia_asistio_noPublicaEvento() {
+        when(claseRepository.findById(1)).thenReturn(Optional.of(clase));
+        when(inscripcionRepository.findByClaseClaseIdAndUsuarioUsuarioIdAndEstado(1, 7, EstadoEnum.Activa))
+                .thenReturn(Optional.of(inscripcion));
+        when(controlAsistenciaRepository.existsByInscripcionInscripcionIdAndFechaAsistencia(10, fecha))
+                .thenReturn(false);
+        when(controlAsistenciaRepository.saveAll(anyList())).thenAnswer(i -> i.getArgument(0));
+
+        controlAsistenciaService.registrarAsistencia(3, request);
+
+        verify(eventPublisher, never()).publishEvent(any(Object.class));
     }
 }
