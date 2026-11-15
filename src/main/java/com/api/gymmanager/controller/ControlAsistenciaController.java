@@ -22,6 +22,8 @@ import com.api.gymmanager.service.ControlAsistenciaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+import com.api.gymmanager.dto.ControlAsistencia.response.HistorialClaseResponse;
+
 @RestController
 @RequestMapping("/api/asistencias")
 @RequiredArgsConstructor
@@ -45,5 +47,12 @@ public class ControlAsistenciaController {
             @Valid @RequestBody CreateControlAsistenciaRequest dto) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(controlAsistenciaService.registrarAsistencia(entrenador.getUsuarioId(), dto));
+    }
+        @PreAuthorize("hasRole('Miembro')")
+    @GetMapping("/mi-historial")
+    public ResponseEntity<List<HistorialClaseResponse>> consultarHistorial(
+            @AuthenticationPrincipal Usuario miembro) {
+        return ResponseEntity.ok(
+                controlAsistenciaService.consultarHistorial(miembro.getUsuarioId()));
     }
 }

@@ -43,6 +43,9 @@ import org.springframework.context.ApplicationEventPublisher;
 
 import com.api.gymmanager.event.InasistenciaRegistradaEvent;
 
+import com.api.gymmanager.dto.ControlAsistencia.response.HistorialClaseResponse;
+import com.api.gymmanager.model.ControlAsistencia;
+
 @ExtendWith(MockitoExtension.class)
 class ControlAsistenciaServiceTest {
 
@@ -183,5 +186,51 @@ class ControlAsistenciaServiceTest {
         controlAsistenciaService.registrarAsistencia(3, request);
 
         verify(eventPublisher, never()).publishEvent(any(Object.class));
+    }
+        private ControlAsistencia registro(Integer id, Inscripcion insc, AsistenciaEnum a, LocalDate f) {
+        ControlAsistencia r = new ControlAsistencia();
+        r.setAsistenciaId(id);
+        r.setInscripcion(insc);
+        r.setAsistencia(a);
+        r.setFechaAsistencia(f);
+        return r;
+    }
+
+    @Test
+    void consultarHistorial_agrupaPorClaseYCuentaTotales() {
+        Clase clase2 = new Clase();
+        clase2.setClaseId(2);
+        clase2.setNombreClase("Spinning");
+
+        Inscripcion inscripcion2 = new Inscripcion();
+        inscripcion2.setInscripcionId(11);
+        inscripcion2.setClase(clase2);
+
+        when(controlAsistenciaRepository
+                .findByInscripcionUsuarioUsuarioIdOrderByFechaAsistenciaDesc(7))
+                .thenReturn(List.of(
+                        registro(1, inscripcion, AsistenciaEnum.Asistio, LocalDate.of(2026, 11, 14)),
+                        registro(2, inscripcion, AsistenciaEnum.Falto, LocalDate.of(2026, 11, 13)),
+                        registro(3, inscripcion2, AsistenciaEnum.Asistio, LocalDate.of(2026, 11, 12))));
+
+        List<HistorialClaseResponse> r = controlAsistenciaService.consultarHistorial(7);
+
+        assertEquals(2, r.size());
+        assertEquals(1, r.get(0).claseId());
+        assertEquals(1, r.get(0).totalAsistio());
+        assertEquals(1, r.get(0).totalFalto());
+        assertEquals(2, r.get(0).registros().size());
+        assertEquals(2, r.get(1).claseId());
+    }
+
+    @Test
+    void consultarHistorial_sinRegistros_devuelveListaVacia() {
+        when(controlAsistenciaRepository
+                .findByInscripcionUsuarioUsuarioIdOrderByFechaAsistenciaDesc(7))
+                .thenReturn(List.of());
+
+        List<HistorialClaseResponse> r = controlAsistenciaService.consultarHistorial(7);
+
+        assertEquals(0, r.size());
     }
 }

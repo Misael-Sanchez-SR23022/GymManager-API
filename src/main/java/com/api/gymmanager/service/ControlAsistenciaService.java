@@ -36,6 +36,13 @@ import org.springframework.context.ApplicationEventPublisher;
 import com.api.gymmanager.event.InasistenciaRegistradaEvent;
 import com.api.gymmanager.model.EnumModel.AsistenciaEnum;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import com.api.gymmanager.dto.ControlAsistencia.response.HistorialClaseResponse;
+import com.api.gymmanager.dto.ControlAsistencia.response.RegistroAsistenciaResponse;
+
 @Service
 @RequiredArgsConstructor
 public class ControlAsistenciaService {
@@ -178,5 +185,40 @@ public class ControlAsistenciaService {
     private String nombreCompleto(Usuario u) {
         return u.getPrimerNombre()
                 + (u.getSegundoNombre() != null ? " " + u.getSegundoNombre() : "");
+    }
+        // Caso de uso: Consultar Asistencia (solo lectura), agrupada por clase
+    @Transactional(readOnly = true)
+    public List<HistorialClaseResponse> consultarHistorial(Integer usuarioId) {
+        List<ControlAsistencia> registros = controlAsistenciaRepository
+                .findByInscripcionUsuarioUsuarioIdOrderByFechaAsistenciaDesc(usuarioId);
+
+        // Agrupa por clase conservando el orden (lo más reciente primero)
+        Map<Integer, List<ControlAsistencia>> porClase = registros.stream()
+                .collect(Collectors.groupingBy(
+                        r -> r.getInscripcion().getClase().getClaseId(),
+                        LinkedHashMap::new,
+                        Collectors.toList()));
+
+        // Sin registros, devuelve una lista vacía (historial vacío)
+        return porClase.values().stream()
+                .map(this::mapToHistorialClase)
+                .toList();
+    }
+
+    private HistorialClaseResponse mapToHistorialClase(List<ControlAsistencia> registros) {
+        Clase clase = registros.get(0).getInscripcion().getClase();
+
+        List<RegistroAsistenciaResponse> items = registros.stream()
+                .map(r -> new RegistroAsistenciaResponse(
+                        r.getAsistenciaId(), r.getFechaAsistencia(), r.getAsistencia()))
+                .toList();
+
+        long asistio = registros.stream()
+                .filter(r -> r.getAsistencia() == AsistenciaEnum.Asistio)
+                .count();
+
+        return new HistorialClaseResponse(
+                clase.getClaseId(), clase.getNombreClase(),
+                asistio, registros.size() - asistio, items);
     }
 }
