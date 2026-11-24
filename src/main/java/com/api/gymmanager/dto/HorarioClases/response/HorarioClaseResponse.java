@@ -4,7 +4,7 @@ import java.sql.Time;
 
 import com.api.gymmanager.model.EnumModel.SemanaEnum;
 
-public record CreateHorarioClaseResponse(
+public record HorarioClaseResponse(
     Integer horarioId,
     SemanaEnum diasClase,
     Integer claseId,
