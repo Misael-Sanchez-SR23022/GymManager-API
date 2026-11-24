@@ -1,5 +1,7 @@
 package com.api.gymmanager.service;
 
+import java.time.LocalDateTime;
+
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final RolRepository rolRepository;
     private final JwtService jwtService;
+    private final EmailService emailService;
 
     public LoginResponse login(LoginRequest dto) {
         Usuario entity = usuarioRepository.findByNombreUsuario(dto.nombreUsuario())
@@ -34,7 +37,14 @@ public class AuthService {
         if (!passwordEncoder.matches(dto.contrasenia(), entity.getContrasenia())) {
             throw new BadCredentialsException("Credenciales inválidas");
         }
+
         String token = jwtService.generateToken(entity);
+
+        emailService.enviarInicioSesion(
+                entity.getCorreoElectronico(),
+                entity.getNombreUsuario(),
+                LocalDateTime.now()
+        );
 
         return new LoginResponse(token, mapToResponse(entity));
     }
@@ -63,10 +73,14 @@ public class AuthService {
 
         Usuario saved = usuarioRepository.save(entity);
 
+        emailService.enviarBienvenida(
+                saved.getCorreoElectronico(),
+                saved.getNombreUsuario()
+        );
+
         String token = jwtService.generateToken(saved);
 
-        return new LoginResponse(token, mapToResponse(entity));
-
+        return new LoginResponse(token, mapToResponse(saved));
     }
 
     private UsuarioResponse mapToResponse(Usuario entity) {

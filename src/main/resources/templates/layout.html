@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${nombreAplicacion}">GymManager</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&display=swap');
+        @media only screen and (max-width: 620px) {
+            .outer { padding: 12px 6px !important; }
+            .card-inner { padding: 10px !important; }
+            .email-content { padding: 28px 16px 20px !important; }
+            .email-title { font-size: 24px !important; }
+            .email-text { font-size: 15px !important; }
+            .logo { width: 220px !important; height: 158px !important; }
+        }
+    </style>
+</head>
+<body style="margin:0; padding:0; background-color:#e6e6e6; font-family:'Chakra Petch', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+
+<table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation"
+       bgcolor="#e6e6e6" style="background-color:#e6e6e6; border-collapse:collapse;">
+    <tr>
+        <td class="outer" align="center" style="padding:40px 15px;">
+
+            <table width="600" cellpadding="0" cellspacing="0" border="0" role="presentation"
+                   style="width:100%; max-width:600px; background-color:#ffffff; border:1px solid #cfcfcf; border-collapse:separate;">
+                <tr>
+                    <td class="card-inner" style="padding:15px;">
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation"
+                               style="border-collapse:collapse;">
+
+                            <!-- Encabezado compartido -->
+                            <tr>
+                                <td align="center"
+                                    style="padding:28px 20px 22px; background-color:#ffffff; border-bottom:3px solid #e03131;">
+                                    <table cellpadding="0" cellspacing="0" border="0" role="presentation" align="center"
+                                           style="margin:0 auto; border-collapse:collapse;">
+                                        <tr>
+                                          <td class="logo" width="290" height="208" align="center" valign="middle"
+                                                role="img" aria-label="GymManager"
+                                                th:style="'width:290px; height:208px; background-image:url(' + ${logoUrl} + '); background-repeat:no-repeat; background-position:center; background-size:contain;'"
+                                                style="width:290px; height:208px; background-image:url(https://res.cloudinary.com/kwxqqdwn/image/upload/v1790695945/logoGym.png); background-repeat:no-repeat; background-position:center; background-size:contain;">
+                                                &nbsp;
+                                          </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+
+                            <!-- Contenido particular de cada correo -->
+                            <th:block th:replace="~{${contenidoTemplate} :: contenido}"></th:block>
+
+                        </table>
+                    </td>
+                </tr>
+            </table>
+
+            <!-- Pie de página compartido -->
+            <table width="600" cellpadding="0" cellspacing="0" border="0" role="presentation"
+                   style="width:100%; max-width:600px;">
+                <tr>
+                    <td align="center" style="padding:20px 10px 0; text-align:center;">
+                        <p style="font-family:'Chakra Petch', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin:0 0 4px; font-size:12px; line-height:1.6; color:#555555;">
+                            Este correo fue enviado automáticamente. Por favor, no respondas a este mensaje.
+                        </p>
+                        <p style="font-family:'Chakra Petch', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin:0; font-size:12px; line-height:1.6; color:#555555;">
+                            © <span th:text="${anio}">2026</span>
+                            <span th:text="${nombreAplicacion}">GymManager</span>
+                        </p>
+                    </td>
+                </tr>
+            </table>
+
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

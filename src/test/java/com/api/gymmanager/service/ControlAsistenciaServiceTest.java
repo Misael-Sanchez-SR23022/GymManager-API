@@ -39,8 +39,6 @@ import com.api.gymmanager.repository.InscripcionRepository;
 import static org.mockito.ArgumentMatchers.any;
 
 import org.mockito.ArgumentCaptor;
-import org.springframework.context.ApplicationEventPublisher;
-
 import com.api.gymmanager.event.InasistenciaRegistradaEvent;
 
 import com.api.gymmanager.dto.ControlAsistencia.response.HistorialClaseResponse;

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<body>
+<th:block th:fragment="contenido">
+    <tr>
+        <td class="email-content" align="center"
+            style="padding:34px 25px 24px; background-color:#ffffff; text-align:center;">
+
+            <h1 class="email-title"
+                style="font-family:'Chakra Petch', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin:0 0 24px; font-size:32px; line-height:1.3; font-weight:700; color:#FFBE58; text-align:center;">
+                ¡Bienvenido, <span th:text="${nombreUsuario}" style="color:#AC1C1C;">Usuario</span><span style="color:#AC1C1C;">!</span>
+            </h1>
+
+            <p class="email-text"
+               style="font-family:'Chakra Petch', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin:0 auto 14px; max-width:460px; font-size:16px; line-height:1.7; color:#555555;">
+                Tu cuenta en
+                <strong th:text="${nombreAplicacion}" style="color:#222222; font-weight:700;">GymManager</strong>
+                ha sido creada correctamente.
+            </p>
+
+            <p class="email-text"
+               style="font-family:'Chakra Petch', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin:0 auto 12px; max-width:460px; font-size:14px; line-height:1.8; color:#888888;">
+                Ya puedes acceder a tu panel, registrar tus entrenamientos
+                y comenzar a gestionar tu progreso físico.
+            </p>
+
+            <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation"
+                   style="margin:30px 0;">
+                <tr>
+                    <td height="1" style="height:1px; line-height:1px; font-size:1px; background-color:#eceff3;">&nbsp;</td>
+                </tr>
+            </table>
+
+            <p class="email-text"
+               style="font-family:'Chakra Petch', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin:0 auto 10px; max-width:460px; font-size:14px; line-height:1.7; color:#888888;">
+                Si tú no realizaste este registro, puedes ignorar este correo.
+            </p>
+        </td>
+    </tr>
+</th:block>
+</body>
+</html>
