@@ -34,25 +34,25 @@ public class ControlAsistenciaController {
     @PreAuthorize("hasRole('Entrenador')")
     @GetMapping("/clases/{claseId}/inscritos")
     public ResponseEntity<List<InscritoResponse>> listarInscritos(
-            @AuthenticationPrincipal Usuario entrenador,
+            @AuthenticationPrincipal Usuario usuario,
             @PathVariable Integer claseId) {
         return ResponseEntity.ok(
-                controlAsistenciaService.listarInscritos(claseId, entrenador.getUsuarioId()));
+                controlAsistenciaService.listarInscritos(claseId, usuario.getUsuarioId()));
     }
 
     @PreAuthorize("hasRole('Entrenador')")
     @PostMapping
     public ResponseEntity<List<ControlAsistenciaResponse>> registrarAsistencia(
-            @AuthenticationPrincipal Usuario entrenador,
+            @AuthenticationPrincipal Usuario usuario,
             @Valid @RequestBody CreateControlAsistenciaRequest dto) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(controlAsistenciaService.registrarAsistencia(entrenador.getUsuarioId(), dto));
+                .body(controlAsistenciaService.registrarAsistencia(usuario.getUsuarioId(), dto));
     }
-        @PreAuthorize("hasRole('Miembro')")
+    @PreAuthorize("hasRole('Miembro')")
     @GetMapping("/mi-historial")
     public ResponseEntity<List<HistorialClaseResponse>> consultarHistorial(
-            @AuthenticationPrincipal Usuario miembro) {
+            @AuthenticationPrincipal Usuario usuario) {
         return ResponseEntity.ok(
-                controlAsistenciaService.consultarHistorial(miembro.getUsuarioId()));
+                controlAsistenciaService.consultarHistorial(usuario.getUsuarioId()));
     }
 }
