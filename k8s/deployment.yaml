@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gymmanager-api
+  labels:
+    app: gymmanager-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gymmanager-api
+  template:
+    metadata:
+      labels:
+        app: gymmanager-api
+    spec:
+      containers:
+        - name: gymmanager-api
+          image: gymmanager-api:latest
+          imagePullPolicy: Never        # usa la imagen local de Docker Desktop
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "1Gi"
+          startupProbe:                  
+            tcpSocket:
+              port: 8080
+            periodSeconds: 5
+            failureThreshold: 36
+          readinessProbe:
+            tcpSocket:
+              port: 8080
+            periodSeconds: 10
+          volumeMounts:
+            - name: app-config
+              mountPath: /app/config     
+              readOnly: true
+      volumes:
+        - name: app-config
+          secret:
+            secretName: gymmanager-config
