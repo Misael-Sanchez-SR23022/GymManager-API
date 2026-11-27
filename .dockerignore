@@ -1,0 +1,12 @@
+.git
+.github
+.vscode
+.kube-local
+target
+docs
+k8s
+scripts
+*.md
+# Secretos: nunca dentro de la imagen
+**/application-local.properties
+.env

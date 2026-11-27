@@ -1,0 +1,1256 @@
+{
+  "info": {
+    "_postman_id": "e23cfb1c-3df7-439a-9675-a2aba51c8dc2",
+    "name": "GymManager-API",
+    "description": "HAR To Postman Generated Collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "27020431",
+    "_collection_link": "https://go.postman.co/collection/27020431-e23cfb1c-3df7-439a-9675-a2aba51c8dc2?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();",
+                  "pm.globals.set(\"token\", response.token);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombreUsuario\": \"\",\n  \"contrasenia\": \"\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer "
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"primerNombre\": \"\",\n  \"segundoNombre\": \"\",\n  \"nombreUsuario\": \"\",\n  \"correoElectronico\": \"\",\n  \"contrasenia\": \"\",\n  \"genero\": \"\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Usuarios",
+      "item": [
+        {
+          "name": "crear nuevo usuario",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer "
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"primerNombre\": \"\",\n  \"segundoNombre\": \"\",\n  \"correoElectronico\": \"\",\n  \"nombreUsuario\": \"\",\n  \"contrasenia\": \"\",\n  \"genero\": \"\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/usuarios",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "listar todos los usuarios",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer "
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/usuarios",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "listar usuario por ID",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer "
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/usuarios/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "usuarios",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "listar miembros",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer "
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/usuarios?rol=Miembro",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "usuarios"
+              ],
+              "query": [
+                {
+                  "key": "rol",
+                  "value": "Miembro"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "listar entrenador",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer "
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/usuarios?rol=Entrenador",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "usuarios"
+              ],
+              "query": [
+                {
+                  "key": "rol",
+                  "value": "Entrenador"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "actualizar usuario",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer "
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"primerNombre\": \"\",\n  \"segundoNombre\": \"\",\n  \"correoElectronico\": \"\",\n  \"nombreUsuario\": \"\",\n  \"genero\": \"\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/usuarios/0",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "usuarios",
+                "0"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "asignar entrenador",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer "
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"rolId\": 2\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/usuarios/0/rol",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "usuarios",
+                "0",
+                "rol"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "eliminar usuario",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer "
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/usuarios/0",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "usuarios",
+                "0"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Clases",
+      "item": [
+        {
+          "name": "crear nueva clase",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer "
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombreClase\": \"\",\n  \"capacidadClase\": 0,\n  \"entrenadorId\": 0\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/clases",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "clases"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "listar todas las clases",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer "
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/clases",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "clases"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "listar clase por ID",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer "
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/clases/0",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "clases",
+                "0"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "actualizar clase",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer "
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombreClase\": \"\",\n  \"capacidadClase\": 0,\n  \"entrenadorId\": 0\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/clases/0",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "clases",
+                "0"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "eliminar clase",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer "
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/clases/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "clases",
+                ""
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Roles",
+      "item": [
+        {
+          "name": "crear nuevo rol",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer "
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"nombreRol\" : \"\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/roles",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "roles"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "listar todos los roles",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer "
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/roles",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "roles"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "listar rol por ID",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer "
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/roles/0",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "roles",
+                "0"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "actualizar rol",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer "
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"nombreRol\" : \"\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/roles",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "roles"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "eliminar rol",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer "
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/roles/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "roles",
+                ""
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "HorariosClases",
+      "item": [
+        {
+          "name": "crear nuevo horario",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer "
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"diasClase\": \"\",\n  \"claseId\": 0,\n  \"horaInicio\": \"00:00:00\",\n  \"horaFin\": \"00:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/horarios-clases",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "horarios-clases"
+              ],
+              "query": [
+                {
+                  "key": "confirmarTraslape",
+                  "value": "true",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "listar todos los horarios",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer "
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/horarios-clases",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "horarios-clases"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "listar horario por ID",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer "
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/horarios-clases/0",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "horarios-clases",
+                "0"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "actualizar horario",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer "
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"claseId\": 0,\n  \"diasClase\": \"\",\n  \"horaInicio\": \"00:00:00\",\n  \"horaFin\": \"00:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/horarios-clases/0",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "horarios-clases",
+                "0"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "eliminar horario",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer "
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/horarios-clases/0",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "horarios-clases",
+                "0"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Inscripciones",
+      "item": [
+        {
+          "name": "inscribirse a clase",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer "
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"claseId\": \n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/inscripciones",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "inscripciones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "cancelar inscripcion",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{bearer_token_1ddk}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/inscripciones/0/cancelar",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "inscripciones",
+                "0",
+                "cancelar"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Asistencias",
+      "item": [
+        {
+          "name": "registrar asistencia",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer "
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"claseId\": 0,\n  \"fechaAsistencia\": \"0000-00-00\",\n  \"asistencias\": [\n    {\n      \"usuarioId\": 0,\n      \"asistencia\": \"Falto\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/asistencias",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "asistencias"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "consultar inscritos en una clase",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer "
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/asistencias/clases/0/inscritos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "asistencias",
+                "clases",
+                "0",
+                "inscritos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "historial de asistencias",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer "
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/asistencias/mi-historial",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "asistencias",
+                "mi-historial"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "bearer_token_1ddk",
+      "secret": true,
+      "source": {
+        "provider": "postman",
+        "postman": {
+          "type": "cloud",
+          "secretId": "92a88db5-5c60-43fe-b61a-c57918f2b563",
+          "vaultId": "27400e2f-341e-4e0d-a123-e12a6d5d9882"
+        }
+      }
+    }
+  ]
+}
